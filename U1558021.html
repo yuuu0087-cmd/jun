@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>圖片連結導覽</title>
+    <!-- 內部 CSS 樣式 -->
+    <style>
+        /* 基礎版面與背景設定 */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        /* 圖片容器：排成一排並自動換行 */
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            justify-content: center;
+            max-width: 1000px;
+        }
+
+        /* 圖片超連結區塊 */
+        .image-link {
+            display: inline-block;
+            text-decoration: none;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            /* 動態平滑過渡效果 */
+            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), 
+                        box-shadow 0.3s ease;
+        }
+
+        /* 圖片本身設定 */
+        .image-link img {
+            width: 200px;
+            height: 150px;
+            object-fit: cover; /* 讓圖片自動裁切符合尺寸而不變形 */
+            display: block;
+            transition: filter 0.3s ease;
+        }
+
+        /* 滑鼠懸停（Hover）動態效果：放大 + 提升陰影 */
+        .image-link:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .image-link:hover img {
+            filter: brightness(1.05); /* 稍微變亮提升視覺感 */
+        }
+
+        /* 按下（Active/點擊瞬間）動態效果：微大幅度縮小按壓感 */
+        .image-link:active {
+            transform: translateY(-2px) scale(0.98);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>精選連結導覽</h1>
+
+    <div class="gallery">
+        <!-- 圖片 1 -->
+        <a href="https://www.google.com" target="_blank" class="image-link">
+            <img src="https://picsum.photos/id/1015/300/200" alt="連結 1">
+        </a>
+
+        <!-- 圖片 2 -->
+        <a href="填寫你的網址2" target="_blank" class="image-link">
+            <img src="https://picsum.photos/id/1018/300/200" alt="連結 2">
+        </a>
+
+        <!-- 圖片 3 -->
+        <a href="填寫你的網址3" target="_blank" class="image-link">
+            <img src="https://picsum.photos/id/1025/300/200" alt="連結 3">
+        </a>
+
+        <!-- 圖片 4 -->
+        <a href="填寫你的網址4" target="_blank" class="image-link">
+            <img src="https://picsum.photos/id/1039/300/200" alt="連結 4">
+        </a>
+
+        <!-- 圖片 5 -->
+        <a href="填寫你的網址5" target="_blank" class="image-link">
+            <img src="https://picsum.photos/id/1050/300/200" alt="連結 5">
+        </a>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,21 @@
+<html>
+<head>
+    <title>簡單的HTML+內部CSS 範例</title>
+
+<style>
+
+body{background: #f0f0f0}
+h1{color:iron;}
+a:hover{color:light grey;}
+a:link{color::}
+
+</style>
+
+</head>
+<body>
+    <h1>歡迎來到我的網站</h1>
+    <a href="https://www.nuu.edu.tw/">關於我</a>
+    <img src="abc.png">
+    <p>這是一個簡單的HTML範例，展示了基本的網頁結構。</p>
+</body>
+</html>
