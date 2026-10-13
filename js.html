@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>加入購物車特效</title>
+    <!-- 引入 FontAwesome 圖示 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: sans-serif;
+            background: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        /* 導覽列與購物車圖示 */
+        .navbar {
+            position: fixed;
+            top: 20px;
+            right: 30px;
+            background: #fff;
+            padding: 10px 20px;
+            border-radius: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cart-icon-wrapper {
+            position: relative;
+            cursor: pointer;
+            font-size: 20px;
+            color: #333;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -10px;
+            background-color: #ff4757;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 50%;
+            transition: transform 0.2s;
+        }
+
+        /* 購物車數字跳動動畫 */
+        .cart-badge.bounce {
+            transform: scale(1.4);
+        }
+
+        /* 商品按鈕樣式 */
+        .add-to-cart-btn {
+            background-color: #3182ce;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            outline: none;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+
+        .add-to-cart-btn:active {
+            transform: scale(0.95); /* 點擊按鈕下陷 */
+        }
+
+        .add-to-cart-btn.success {
+            background-color: #38a169; /* 成功加入變綠色 */
+        }
+
+        /* 飛向購物車的特效元素樣式 */
+        .fly-item {
+            position: fixed;
+            z-index: 9999;
+            width: 30px;
+            height: 30px;
+            background-color: #3182ce;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+            pointer-events: none;
+            transition: all 0.8s cubic-bezier(0.2, -0.6, 0.8, 0.4); /* 模擬拋物線動畫曲線 */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 右上角購物車 -->
+    <div class="navbar">
+        <div class="cart-icon-wrapper">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <span id="cartCount" class="cart-badge">0</span>
+        </div>
+        <span>購物車</span>
+    </div>
+
+    <!-- 測試按鈕 -->
+    <button class="add-to-cart-btn" id="addBtn">加入購物車</button>
+
+    <!-- 特效邏輯 Script -->
+    <script>
+        const addBtn = document.getElementById('addBtn');
+        const cartCount = document.getElementById('cartCount');
+        const cartIconWrapper = document.querySelector('.cart-icon-wrapper');
+
+        let count = 0;
+
+        addBtn.addEventListener('click', (e) => {
+            // 防止動畫執行期間重複點擊
+            if (addBtn.classList.contains('success')) return;
+
+            // 1. 改變按鈕文字與顏色
+            const originalText = addBtn.innerHTML;
+            addBtn.innerHTML = '<i class="fa-solid fa-check"></i> 已加入';
+            addBtn.classList.add('success');
+
+            // 2. 觸發飛向購物車的特效
+            createFlyAnimation(e);
+
+            // 3. 設定計時器，於 1.2 秒後恢復按鈕原狀
+            setTimeout(() => {
+                addBtn.innerHTML = originalText;
+                addBtn.classList.remove('success');
+            }, 1200);
+        });
+
+        function createFlyAnimation(event) {
+            // 取得點擊按鈕當下的中心座標
+            const rect = event.target.getBoundingClientRect();
+            const startX = rect.left + rect.width / 2;
+            const startY = rect.top + rect.height / 2;
+
+            // 取得右上角購物車的中心座標
+            const cartRect = cartIconWrapper.getBoundingClientRect();
+            const endX = cartRect.left + cartRect.width / 2;
+            const endY = cartRect.top + cartRect.height / 2;
+
+            // 動態建立飛入特效的圓點元素
+            let flyer = document.createElement('div');
+            flyer.classList.add('fly-item');
+            flyer.innerHTML = '<i class="fa-solid fa-plus"></i>';
+            
+            // 初始位置設定在按鈕中央
+            flyer.style.left = `${startX - 15}px`;
+            flyer.style.top = `${startY - 15}px`;
+            document.body.appendChild(flyer);
+
+            // 強制瀏覽器重排後，賦予終點座標以觸發 CSS Transition 動畫
+            setTimeout(() => {
+                flyer.style.left = `${endX - 15}px`;
+                flyer.style.top = `${endY - 15}px`;
+                flyer.style.transform = 'scale(0.3)'; // 飛過去時逐漸縮小
+                flyer.style.opacity = '0.5';
+            }, 20);
+
+            // 動畫結束 (0.8s) 後移除特效元素，並更新購物車數量
+            setTimeout(() => {
+                flyer.remove();
+
+                // 更新計數器數字
+                count++;
+                cartCount.textContent = count;
+
+                // 觸發購物車數字彈跳特效
+                cartCount.classList.add('bounce');
+                setTimeout(() => {
+                    cartCount.classList.remove('bounce');
+                }, 300);
+
+            }, 800); 
+        }
+    </script>
+</body>
+</html>
